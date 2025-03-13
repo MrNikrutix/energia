@@ -49,7 +49,7 @@ export default function RecentUsage() {
                                 className={`border-t ${ !usage.isCompleted
                                 ? "bg-yellow-50 dark:bg-yellow-900/20"
                                 : ""}`}>
-                                <td className="p-3">Domek {usage.homeId}</td>
+                                <td className="p-3">Domek {usage.homeNumber}</td>
                                 <td className="p-3">{usage.userName}</td>
                                 <td className="p-3 hidden md:table-cell">{new Date(usage.date).toLocaleDateString()}</td>
                                 <td className="p-3">

@@ -18,7 +18,7 @@ export default async function RecordUsagePage({ params }: { params: { id: string
       </div>
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Record Energy Usage</h1>
-        <UsageForm homeId={params.id}/>
+        <UsageForm homeNumber={params.id}/>
       </div>
     </div>
   )

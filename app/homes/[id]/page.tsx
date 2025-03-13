@@ -147,7 +147,7 @@ export default function HomePage() {
             </Button>
           ) : (
             <Button asChild>
-              <Link href={`/record-usage/${home.id}`}>Dodaj zużycie</Link>
+              <Link href={`/record-usage/${home.number}`}>Dodaj zużycie</Link>
             </Button>
           )}
         </div>

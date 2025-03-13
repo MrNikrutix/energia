@@ -24,8 +24,8 @@ import { UsageFormData } from "@/lib/types"
 
 const API_BASE_URL = "http://127.0.0.1:8000"
 
-async function getLastMeterReading(homeId: string): Promise<number> {
-  const response = await fetch(`${API_BASE_URL}/api/homes/${homeId}/last-meter-reading`)
+async function getLastMeterReading(homeNumber: string): Promise<number> {
+  const response = await fetch(`${API_BASE_URL}/api/homes/${homeNumber}/last-meter-reading`)
   if (!response.ok) {
     throw new Error("Nie udało się pobrać ostatniego odczytu licznika")
   }
@@ -89,8 +89,8 @@ const formSchema = z
     },
   )
 
-// Teraz komponent przyjmuje bezpośrednio homeId
-export function UsageForm({ homeId }: { homeId: string }) {
+// Teraz komponent przyjmuje bezpośrednio homeNumber
+export function UsageForm({ homeNumber }: { homeNumber: string }) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [lastReading, setLastReading] = useState<number | null>(null)
@@ -99,14 +99,14 @@ export function UsageForm({ homeId }: { homeId: string }) {
   useEffect(() => {
     const fetchLastReading = async () => {
       try {
-        const reading = await getLastMeterReading(homeId)
+        const reading = await getLastMeterReading(homeNumber)
         setLastReading(reading)
       } catch (err) {
         console.error("Błąd podczas pobierania ostatniego odczytu:", err)
       }
     }
     fetchLastReading()
-  }, [homeId])
+  }, [homeNumber])
 
   const today = new Date().toISOString().split("T")[0]
 
@@ -146,7 +146,7 @@ export function UsageForm({ homeId }: { homeId: string }) {
     setIsSubmitting(true)
     try {
       const payload: UsageFormData = {
-        homeId,
+        homeNumber,
         userName: values.userName,
         initialReading: values.initialReading,
         finalReading: values.includeEndReading ? values.finalReading : undefined,
@@ -162,7 +162,7 @@ export function UsageForm({ homeId }: { homeId: string }) {
           ? "Zużycie energii zostało zapisane."
           : "Początkowy odczyt został zapisany. Pamiętaj, aby uzupełnić odczyt końcowy później.",
       })
-      router.push(`/homes/${homeId}`)
+      router.push(`/homes/${homeNumber}`)
       router.refresh()
     } catch (err) {
       console.error("Błąd podczas zapisywania zużycia:", err)
@@ -179,7 +179,7 @@ export function UsageForm({ homeId }: { homeId: string }) {
   return (
     <Card className="p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-semibold">Domek {homeId}</h2>
+        <h2 className="text-xl font-semibold">Domek {homeNumber}</h2>
         {lastReading !== null && (
           <p className="text-sm text-muted-foreground mt-1">
             Ostatni odczyt licznika: {lastReading.toFixed(1)} kWh
@@ -334,7 +334,7 @@ export function UsageForm({ homeId }: { homeId: string }) {
           />
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.push(`/homes/${homeId}`)}>
+            <Button type="button" variant="outline" onClick={() => router.push(`/homes/${homeNumber}`)}>
               Anuluj
             </Button>
             <Button type="submit" disabled={isSubmitting}>

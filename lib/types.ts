@@ -1,11 +1,10 @@
 export interface Home {
-  id: string
   number: string // Numer domku jako jedyny identyfikator
 }
 
 export interface Usage {
   id: string
-  homeId: string
+  homeNumber: string
   userName: string
   initialReading: number // Stan początkowy licznika
   finalReading?: number // Stan końcowy licznika - opcjonalny
@@ -22,7 +21,7 @@ export interface HomeFormData {
 }
 
 export interface UsageFormData {
-  homeId: string
+  homeNumber: string
   userName: string
   initialReading: number
   finalReading?: number // Opcjonalny przy tworzeniu

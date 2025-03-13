@@ -26,9 +26,9 @@ interface HomeButtonsProps {
 export default function HomeButtons({ onDelete }: HomeButtonsProps) {
   const [homes, setHomes] = useState<HomeType[] | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; homeId: string | null }>({
+  const [deleteDialog, setDeleteDialog] = useState<{ isOpen: boolean; homeNumber: string | null }>({
     isOpen: false,
-    homeId: null,
+    homeNumber: null,
   })
   const { toast } = useToast()
 
@@ -45,22 +45,22 @@ export default function HomeButtons({ onDelete }: HomeButtonsProps) {
     fetchHomes()
   }, [])
 
-  const handleDeleteClick = (homeId: string) => {
-    setDeleteDialog({ isOpen: true, homeId })
+  const handleDeleteClick = (homeNumber: string) => {
+    setDeleteDialog({ isOpen: true, homeNumber })
   }
 
   const confirmDelete = async () => {
-    if (!deleteDialog.homeId) return
+    if (!deleteDialog.homeNumber) return
 
-    setDeletingId(deleteDialog.homeId)
+    setDeletingId(deleteDialog.homeNumber)
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/homes/${deleteDialog.homeId}`, {
+      const res = await fetch(`http://127.0.0.1:8000/api/homes/${deleteDialog.homeNumber}`, {
         method: "DELETE",
       })
 
       if (!res.ok) throw new Error("Błąd podczas usuwania domku")
 
-      setHomes((prev) => prev?.filter((home) => home.id !== deleteDialog.homeId) || [])
+      setHomes((prev) => prev?.filter((home) => home.number !== deleteDialog.homeNumber) || [])
       onDelete()
 
       toast({
@@ -77,12 +77,12 @@ export default function HomeButtons({ onDelete }: HomeButtonsProps) {
       })
     } finally {
       setDeletingId(null)
-      setDeleteDialog({ isOpen: false, homeId: null })
+      setDeleteDialog({ isOpen: false, homeNumber: null })
     }
   }
 
   const cancelDelete = () => {
-    setDeleteDialog({ isOpen: false, homeId: null })
+    setDeleteDialog({ isOpen: false, homeNumber: null })
   }
 
   return (
@@ -108,9 +108,9 @@ export default function HomeButtons({ onDelete }: HomeButtonsProps) {
             {homes.length > 0 ? (
               <>
                 {homes.map((home) => (
-                  <div key={home.id} className="flex flex-col items-center relative group">
+                  <div key={home.number} className="flex flex-col items-center relative group">
                     <div className="relative">
-                    <Link href={`/homes/${home.id}`}><Button
+                    <Link href={`/homes/${home.number}`}><Button
                         variant="outline"
                         className="h-16 w-16 rounded-full text-xl font-bold border-2 hover:border-primary hover:bg-primary/5 transition-all duration-200"
                       >
@@ -131,10 +131,10 @@ export default function HomeButtons({ onDelete }: HomeButtonsProps) {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             className="text-destructive focus:text-destructive cursor-pointer"
-                            onClick={() => handleDeleteClick(home.id)}
-                            disabled={deletingId === home.id}
+                            onClick={() => handleDeleteClick(home.number)}
+                            disabled={deletingId === home.number}
                           >
-                            {deletingId === home.id ? (
+                            {deletingId === home.number ? (
                               <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 <span>Usuwanie...</span>

@@ -77,7 +77,7 @@ export function UpdateUsageForm({ usageId, initialData }: { usageId: string; ini
 
       if (!res.ok) throw new Error("Nie udało się zapisać odczytu końcowego.")
 
-      router.push(`/homes/${initialData.homeId}`)
+      router.push(`/homes/${initialData.homeNumber}`)
       router.refresh()
     } catch (error) {
       console.error("Błąd:", error)
@@ -137,7 +137,7 @@ export function UpdateUsageForm({ usageId, initialData }: { usageId: string; ini
           />
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.push(`/homes/${initialData.homeId}`)}>
+            <Button type="button" variant="outline" onClick={() => router.push(`/homes/${initialData.homeNumber}`)}>
               Anuluj
             </Button>
             <Button type="submit" disabled={isSubmitting}>
